@@ -26,31 +26,15 @@ subfolder_lkr=
 [FILE_SUBFOLDERS]
 file_000=.
 file_001=.
-file_002=.
-file_003=.
-file_004=.
-file_005=.
 [GENERATED_FILES]
 file_000=no
 file_001=no
-file_002=no
-file_003=no
-file_004=no
-file_005=no
 [OTHER_FILES]
 file_000=no
 file_001=no
-file_002=no
-file_003=no
-file_004=no
-file_005=no
 [FILE_INFO]
-file_000=Lab2.c
-file_001=keypad.c
-file_002=C:\Users\Nico\Documents\UA\5th Semester\ECE 372\Lab1\lcd.c
-file_003=C:\Program Files (x86)\Microchip\xc16\v1.21\support\PIC24F\h\p24FJ64GA002.h
-file_004=keypad.h
-file_005=C:\Users\Nico\Documents\UA\5th Semester\ECE 372\Lab1\lcd.h
+file_000=C:\Users\Nico\Documents\UA\5th Semester\ECE 372\Lab1\lcd.c
+file_001=keypad.h
 [SUITE_INFO]
 suite_guid={9BCCB495-CD65-480A-BA76-63D8E78B117F}
 suite_state=
