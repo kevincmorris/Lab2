@@ -34,6 +34,7 @@ char KeypadScan() {
 	//           is processed. This is to prevent invalid keypress from being processed if the 
 	//           users presses multiple keys simultaneously.
 	//
+<<<<<<< HEAD
 	
 	    // set Outputs to 0111
         // if inputs 011, then key = 1
@@ -52,10 +53,13 @@ char KeypadScan() {
         // else if inputs 101, then key = 0
         // else if inputs 110, then key = #
     
+=======
+>>>>>>> master
 	return key;
 }
 
 // ******************************************************************************************* //
+<<<<<<< HEAD
 
 
 void __attribute__((interrupt)) _CNInterrupt(void){
@@ -65,3 +69,5 @@ void __attribute__((interrupt)) _CNInterrupt(void){
     
     
     }
+=======
+>>>>>>> master

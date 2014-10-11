@@ -33,8 +33,13 @@ file_001=no
 file_000=no
 file_001=no
 [FILE_INFO]
+<<<<<<< HEAD
 file_000=Lab2.c
 file_001=C:\Program Files (x86)\Microchip\xc16\v1.21\support\PIC24F\h\p24FJ64GA002.h
+=======
+file_000=C:\Users\Nico\Documents\UA\5th Semester\ECE 372\Lab1\lcd.c
+file_001=keypad.h
+>>>>>>> master
 [SUITE_INFO]
 suite_guid={9BCCB495-CD65-480A-BA76-63D8E78B117F}
 suite_state=
