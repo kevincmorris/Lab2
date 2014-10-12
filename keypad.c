@@ -34,7 +34,32 @@ char KeypadScan() {
 	//           is processed. This is to prevent invalid keypress from being processed if the 
 	//           users presses multiple keys simultaneously.
 	//
+	
+	
+	   // set Outputs to 0111
+        // if inputs 011, then key = 1
+        // else if inputs 101, then key = 2
+        // else if inputs 110, then key = 3
+    // set outputs to 1011
+        // if inputs 011, then key = 4
+        // else if inputs 101, then key = 5
+        // else if inputs 110, then key = 6
+    // set outputs to 1101
+        // if inputs 011, then key = 7
+        // else if inputs 101, then key = 8
+        // else if inputs 110, then key = 9
+    // set outputs to 1110
+        // if inputs 011, then key = *
+        // else if inputs 101, then key = 0
+        // else if inputs 110, then key = #
+    
 	return key;
 }
 
 // ******************************************************************************************* //
+
+void __attribute__((interrupt)) _CNInterrupt(void){
+    
+    scanKeypad = 1;
+    IFS1bits.CNIF = 0;
+}
