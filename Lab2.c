@@ -114,24 +114,25 @@ int main(void)
 				// characters programmed on the keypad.  If the key is numeric, it will increment the
 				// password for storage/checking purposes later.  If they key is a symbol and it is not
 				// the # at the end of a password, it will proceed to invalid input statements.
-				if (key >= '0' && key <= '9') {	
-					currentPass = currentPass + (key - '0')*(10^counter);
-					--counter;
-					LCDMoveCursor(1,linePos);
-					LCDPrintChar(key);
-					++linePos;
-				}
-				else if (key != -1) {
-					LCDMoveCursor(1,linePos);
-					LCDPrintChar(key);
+					if (key >= '0' && key <= '9') {	
+						currentPass = currentPass + (key - '0')*(10^counter);
+						--counter;
+						LCDMoveCursor(1,linePos);
+						LCDPrintChar(key);
+						++linePos;
+					}
+					else if (key != -1) {
+						LCDMoveCursor(1,linePos);
+						LCDPrintChar(key);
 					
-					if (scanKeypad = '#' && linePos == 4)
-						check = 1;
-					else
-						check = -2;	
-					++linePos;
-				}
-				}			
+						if (scanKeypad = '#' && linePos == 4)
+							check = 1;
+						else
+							check = -2;	
+						++linePos;
+					}
+					scanKeypad = 0;	
+				}		
 			}
 			
 			// If check == 1, then the user has entered a valid combination for a password, and we will
@@ -189,7 +190,7 @@ int main(void)
 			
 		}	
 		
-	// This switch statement checks the scanKeypad variable
+	// This switch statement checks the key variable if a button has been pressed
 		if (scanKeypad == 1) {
 			key = KeypadScan();
 			switch (key) {
@@ -219,10 +220,8 @@ int main(void)
 					++linePos;
 					--counter;
 					LCDPrintChar(key);
-					if (linePos == 5) {
-						check = 1;	
-					}	
-
+					if (linePos == 5)
+						check = 1;		
 					break;
 			}
 			prevKey = key;
@@ -239,22 +238,24 @@ int main(void)
 				LCDMoveCursor(0,0);
 				LCDPrintString("Bad");
 			
-				T4CONbits.TON = 1;
+				T4CONbits.TON = 1;				// Wait 2 seconds before clear
 				while(IFS1bits.T5IF == 0){};
 				T4CONbits.TON = 0;
 				IFS1bits.T5IF = 0;
 				LCDClear();
 			
-				prevKey = 'N';
-				linePos = 0;
-				counter = 3;
+				prevKey = 'N';					// Reset variable values to starting
+				linePos = 0;					// functionality to ensure code restarts
+				counter = 3;					// same process as initally executed
 				currentPass = 0;
 				check = 0;
 			}
 			else if (check == 1) {
 				LCDCLear();
 				LCDMoveCursor(0,0);
-			
+				
+				// Check if the currentPass is within the database of already stores passwords.
+				// If found, ouput the "Good" functionality; otherwise, "Bad."
 				checkPasswordFound = checkDatabase(currentPass, database);
 				if (checkPasswordFound == 1){
 					LCDPrintString("Good");
@@ -263,20 +264,22 @@ int main(void)
 					LCDPrintString("Bad");	
 				}	
 	
-				T4CONbits.TON = 1;
+				T4CONbits.TON = 1;				// Wait 2 seconds before clear
 				while(IFS1bits.T5IF == 0){};
 				T4CONbits.TON = 0;
 				IFS1bits.T5IF = 0;
 				LCDClear();
 			
-				prevKey = 'N';
-				linePos = 0;
-				counter = 3;
+				prevKey = 'N';					// Reset variable values to starting
+				linePos = 0;					// functionality to ensure code restarts
+				counter = 3;					// same process as originally executed
 				currentPass = 0;
 				check = 0;
 				}
-			}			
-		}
+			}
+			scanKeypad = 0;			
+		}	
+	}	
 	return 0;
 }
 
