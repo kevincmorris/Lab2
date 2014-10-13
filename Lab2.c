@@ -62,6 +62,7 @@ _CONFIG2( IESO_OFF & SOSCSEL_SOSC & WUTSEL_LEG & FNOSC_PRIPLL & FCKSM_CSDCMD & O
 
 volatile char KeypadScanReturn = 0;
 volatile int scanKeypad = 0; // a press has been made
+volatile int buttonsPressed = 0;
 
 
 // ******************************************************************************************* //
@@ -93,7 +94,7 @@ volatile int scanKeypad = 0; // a press has been made
 
 char KeypadScan(){
     key = -1;
-    
+    buttonsPressed = 0;
     
 
     // set Outputs to 0111
@@ -106,12 +107,15 @@ char KeypadScan(){
         // else if inputs 110, then key = 3
     if(PORTBbits & 0x0C20 == 0x0420){
         key = '1';
+        buttonsPressed++;
     }
     else if(PORTBbits & 0x0C20 == 0x0820){
         key = '2';
+        buttonsPressed++;
     }
     else if(PORTBbits & 0x0C20 == 0x0C00){
         key = '3';
+        buttonsPressed++;
     }
         
     // set outputs to 1011
@@ -124,12 +128,15 @@ char KeypadScan(){
         // else if inputs 110, then key = 6
     if(PORTBbits & 0x0C20 == 0x0420){
         key = '4';
+        buttonsPressed++;
     }
     else if(PORTBbits & 0x0C20 == 0x0820){
         key = '5';
+        buttonsPressed++;
     }
     else if(PORTBbits & 0x0C20 == 0x0C00){
         key = '6';
+        buttonsPressed++;
     }
     
     // set outputs to 1101
@@ -142,12 +149,15 @@ char KeypadScan(){
         // else if inputs 110, then key = 9
     if(PORTBbits & 0x0C20 == 0x0420){
         key = '7';
+        buttonsPressed++;
     }
     else if(PORTBbits & 0x0C20 == 0x0820){
         key = '8';
+        buttonsPressed++;
     }
     else if(PORTBbits & 0x0C20 == 0x0C00){
         key = '9';
+        buttonsPressed++;
     }
     // set outputs to 1110
     LATAbits.LATA0 = 1;
@@ -159,16 +169,21 @@ char KeypadScan(){
         // else if inputs 110, then key = #
     if(PORTBbits & 0x0C20 == 0x0420){
         key = '*';
+        buttonsPressed++;
     }
     else if(PORTBbits & 0x0C20 == 0x0820){
         key = '0';
+        buttonsPressed++;
     }
     else if(PORTBbits & 0x0C20 == 0x0C00){
         key = '#';
+        buttonsPressed++;
     }
     
-    
-    return key;
+    if (buttonsPressed == 1) {
+        return key;
+    }
+    return -1;
 }
 
 void __attribute__((interrupt)) _CNInterrupt(void){
