@@ -44,15 +44,15 @@ int main(void)
 {
 	char key;
 	char prevKey = 'N';
-	stateType state;
 	int check = 0;
 	int linePos = 0;
-	unsigned short *database = NULL;
+	int database[10];
 	int counter = 3;
-	unsigned short currentPass = 0;
+	int currentPass = 0;
 	int checkPasswordFound = 0;
+	int i = 0;
+	int power = 1;
 	
-	database = (unsigned short*)malloc(numPasswords * sizeof(unsigned short));
 	database[0] = 1234;
 	
 	// TODO: Initialize and configure IOs, LCD (using your code from Lab 1), 
@@ -62,7 +62,7 @@ int main(void)
 	KeypadInitialize();	
 	
 	// TODO: Initialize scanKeypad variable.
-	scanKeypad = KeypadScan();
+	scanKeypad = 0;
 	
 	// These statements initialize the 32-bit timer corresponding to TMR4,5.  The timer
 	// is set to have a prescaler of 256 and to have a 2 second cycle.  We take the first
@@ -77,7 +77,8 @@ int main(void)
     T4CONbits.T32 = 1;
     T4CONbits.TCKPS0 = 1;
     T4CONbits.TCKPS1 = 1;
-		
+	
+
 
 	
 // 		Check value legend:
@@ -101,7 +102,7 @@ int main(void)
 			LCDMoveCursor(1,linePos);		
 		}
 		else {								// ENTER SET MODE
-			LCDCLear();
+			LCDClear();
 			LCDMoveCursor(0,0);
 			LCDPrintString("Set Mode");
 			linePos = 0;
@@ -109,13 +110,17 @@ int main(void)
 			while (linePos != 5) {			// Scan while not 5 characters entered
 				if (scanKeypad == 1) {
 					key = KeypadScan();
-				
+					scanKeypad = 0;
 				// These two statements check if the key is numeric or if the key is one of the symbol
 				// characters programmed on the keypad.  If the key is numeric, it will increment the
 				// password for storage/checking purposes later.  If they key is a symbol and it is not
 				// the # at the end of a password, it will proceed to invalid input statements.
 					if (key >= '0' && key <= '9') {	
-						currentPass = currentPass + (key - '0')*(10^counter);
+						power = 1;
+						for (i = 0; i < counter; i++) {
+							power = 10 * power;
+						}	
+						currentPass = currentPass + (key - '0')*(power);
 						--counter;
 						LCDMoveCursor(1,linePos);
 						LCDPrintChar(key);
@@ -125,13 +130,13 @@ int main(void)
 						LCDMoveCursor(1,linePos);
 						LCDPrintChar(key);
 					
-						if (scanKeypad = '#' && linePos == 4)
+						if (key == '#' && linePos == 4)
 							check = 1;
 						else
 							check = -2;	
 						++linePos;
 					}
-					scanKeypad = 0;	
+						
 				}		
 			}
 			
@@ -141,7 +146,7 @@ int main(void)
 			if (check == 1) {
 				checkPasswordFound = checkDatabase(currentPass, database);
 				if (checkPasswordFound == 1){
-					LCDCLear();
+					LCDClear();
 					LCDMoveCursor(0,0);
 					LCDPrintString("Already");
 					LCDMoveCursor(1,0);
@@ -149,33 +154,38 @@ int main(void)
 					
 					T4CONbits.TON = 1;
 					while(IFS1bits.T5IF == 0){};
+					TMR4 = 0;
+					TMR5 = 0;
 					T4CONbits.TON = 0;
 					IFS1bits.T5IF = 0;
 					LCDClear();
 				}	
 				else {
 					++numPasswords;
-					database = realloc(database, numPasswords*sizeof(unsigned short));
 					database[numPasswords - 1] = currentPass;
 					
-					LCDCLear();
+					LCDClear();
 					LCDMoveCursor(0,0);
 					LCDPrintString("Valid");
 
 					T4CONbits.TON = 1;
 					while(IFS1bits.T5IF == 0){};
+					TMR4 = 0;
+					TMR5 = 0;
 					T4CONbits.TON = 0;
 					IFS1bits.T5IF = 0;
 					LCDClear();
 				}	
 			}
 			else {
-				LCDCLear();
+				LCDClear();
 				LCDMoveCursor(0,0);
 				LCDPrintString("Invalid");
 
 				T4CONbits.TON = 1;
 				while(IFS1bits.T5IF == 0){};
+				TMR4 = 0;
+				TMR5 = 0;
 				T4CONbits.TON = 0;
 				IFS1bits.T5IF = 0;
 				LCDClear();
@@ -193,18 +203,20 @@ int main(void)
 	// This switch statement checks the key variable if a button has been pressed
 		if (scanKeypad == 1) {
 			key = KeypadScan();
+			scanKeypad = 0;	
 			switch (key) {
-				case '-1':
+				case -1:
 			 		break;
 			 	
 			 	
 				case '*':
 					++linePos;
 					LCDPrintChar(key);
-					if (prevKey >= '0' && prevKey <= '9') {
+					if (prevKey >= '0' && prevKey <= '9') 
 						check = -1;
 					else if (prevKey == '*')
 						check = 2;
+					prevKey = key;
 				 	break;
 			 	
 			 	
@@ -212,19 +224,29 @@ int main(void)
 					LCDPrintChar(key);
 					check = -1;
 					++linePos;
+					prevKey = key;
 			 		break;
 			 	
 			 	
 				default:
-					currentPass = currentPass + (key - '0')*(10^counter);
+					if (prevKey == '*') {
+						check = -1;
+						break;	
+					}	
+					power = 1;
+					for (i = 0; i < counter; i++) {
+						power = 10 * power;
+					}	
+					currentPass = currentPass + (key - '0') * power;
 					++linePos;
 					--counter;
 					LCDPrintChar(key);
-					if (linePos == 5)
-						check = 1;		
+					if (counter == -1)
+						check = 1;
+					prevKey = key;		
 					break;
 			}
-			prevKey = key;
+			
 		
 		
 	// 		Check value legend:
@@ -234,12 +256,14 @@ int main(void)
 		
 	//		OUTPUTTING FOR USER MODE
 			if (check == -1) {
-				LCDCLear();
+				LCDClear();
 				LCDMoveCursor(0,0);
 				LCDPrintString("Bad");
 			
 				T4CONbits.TON = 1;				// Wait 2 seconds before clear
 				while(IFS1bits.T5IF == 0){};
+				TMR4 = 0;
+				TMR5 = 0;
 				T4CONbits.TON = 0;
 				IFS1bits.T5IF = 0;
 				LCDClear();
@@ -251,7 +275,7 @@ int main(void)
 				check = 0;
 			}
 			else if (check == 1) {
-				LCDCLear();
+				LCDClear();
 				LCDMoveCursor(0,0);
 				
 				// Check if the currentPass is within the database of already stores passwords.
@@ -266,6 +290,8 @@ int main(void)
 	
 				T4CONbits.TON = 1;				// Wait 2 seconds before clear
 				while(IFS1bits.T5IF == 0){};
+				TMR4 = 0;
+				TMR5 = 0;
 				T4CONbits.TON = 0;
 				IFS1bits.T5IF = 0;
 				LCDClear();
@@ -277,9 +303,9 @@ int main(void)
 				check = 0;
 				}
 			}
-			scanKeypad = 0;			
+		
 		}	
-	}	
+		
 	return 0;
 }
 
@@ -295,6 +321,7 @@ int main(void)
 //
 // The functionality defined in an interrupt should be a minimal as possible
 // to ensure additional interrupts can be processed. 
+
 void __attribute__((interrupt)) _CNInterrupt(void)
 {	
 	// TODO: Clear interrupt flag
@@ -302,8 +329,14 @@ void __attribute__((interrupt)) _CNInterrupt(void)
 	
 	// TODO: Detect if *any* key of the keypad is *pressed*, and update scanKeypad
 	// variable to indicate keypad scanning process must be executed.
+	_TON = 1;
+	while(IFS0bits.T1IF == 0){};
+	_TON = 0;
+	IFS0bits.T1IF = 0;
 	
-	scanKeypad = 1;
+	if ((PORTB & 0x0C20) != 0x0C20)
+		scanKeypad = 1;
+
 }
 
 // ******************************************************************************************* //
