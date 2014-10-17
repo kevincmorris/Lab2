@@ -2,6 +2,7 @@
 
 #include "p24fj64ga002.h"
 #include "keypad.h"
+#include "lcd.h"
 
 // ******************************************************************************************* //
 
@@ -10,14 +11,47 @@ void KeypadInitialize() {
 	// TODO: Configure IOs and Change Notificaiton interrupt for keypad scanning. This 
 	// configuration should ensure that if any key is pressed, a change notification interrupt 
 	// will be generated.
+	// configure outputs
+//	TRISAbits.TRISA0=0;
+//	TRISAbits.TRISA1=0;
+//	TRISBbits.TRISB2=0;		// ALREADY SET IN THE LCD.C
+//	TRISBbits.TRISB3=0;
+
+	// configure inputs 
+	TRISBbits.TRISB5=1;
+	TRISBbits.TRISB10=1;
+	TRISBbits.TRISB11=1;
+
+	// configure outputs to open drain
+	ODCBbits.ODB12=1;
+	ODCBbits.ODB13=1;
+	ODCBbits.ODB14=1;
+	ODCBbits.ODB15=1;
+
+	// set ouputs to zero to allow change notification
+	LATBbits.LATB12=0;
+	LATBbits.LATB13=0;
+	LATBbits.LATB14=0;
+	LATBbits.LATB15=0;
+
+	//set internal pull up resistors for inputs 
+	CNPU2bits.CN27PUE = 1;
+	CNPU1bits.CN15PUE = 1;
+	CNPU2bits.CN16PUE = 1;
+
+	// set change interupt flag to zero and enable change ISR
+	CNEN2bits.CN27IE = 1;
+	CNEN1bits.CN15IE = 1;
+	CNEN2bits.CN16IE = 1;
+	IFS1bits.CNIF = 0;
+	IEC1bits.CNIE = 1;
 }
 
 // ******************************************************************************************* //
 
 char KeypadScan() {
 	char key = -1;
-	
-	
+	int buttonsPressed = 0;
 	// TODO: Implement the keypad scanning procedure to detect if exactly one button of the 
 	// keypad is pressed. The function should return:
 	//
@@ -34,7 +68,140 @@ char KeypadScan() {
 	//           is processed. This is to prevent invalid keypress from being processed if the 
 	//           users presses multiple keys simultaneously.
 	//
-	return key;
+//	T1CON = 0x0030;
+//	TMR1 = 0;
+//	PR1 = 575;
+//	IFS0bits.T1IF = 0;
+//	_TON = 1;
+//	while(IFS0bits.T1IF == 0){};
+//	TMR1 = 0;
+//	_TON= 0;
+//	IFS0bits.T1IF = 0;
+
+	
+	
+	   // set Outputs to 0111
+        // if inputs 011, then key = 1
+        // else if inputs 101, then key = 2
+        // else if inputs 110, then key = 3
+    // set outputs to 1011
+        // if inputs 011, then key = 4
+        // else if inputs 101, then key = 5
+        // else if inputs 110, then key = 6
+    // set outputs to 1101
+        // if inputs 011, then key = 7
+        // else if inputs 101, then key = 8
+        // else if inputs 110, then key = 9
+    // set outputs to 1110
+        // if inputs 011, then key = *
+        // else if inputs 101, then key = 0
+        // else if inputs 110, then key = #
+    
+    
+    key = '-1';
+    buttonsPressed = 0;
+    LATB = (LATB & 0x0FFF);
+
+    // set Outputs to 0111
+    LATB = (LATB & 0x0FFF) | (0x0007 << 12);//row 1
+DelayUs(2000);
+        // if inputs 011, then key = 1
+        // else if inputs 101, then key = 2
+        // else if inputs 110, then key = 3
+    if((PORTB & 0x0C20) == 0x0420){
+        key = '3';
+        buttonsPressed++;
+    }
+    else if((PORTB & 0x0C20) == 0x0820){
+        key = '2';
+        buttonsPressed++;
+    }
+    else if((PORTB & 0x0C20) == 0x0C00){
+        key = '1';
+        buttonsPressed++;
+    }
+       
+    
+    // set outputs to 1011
+    LATB = (LATB & 0x0FFF) | (0x000B << 12);//row 2
+    DelayUs(2000);
+//	LATBbits.LATB12=1;
+//	LATBbits.LATB13=0;
+//	LATBbits.LATB14=1;
+//	LATBbits.LATB15=1;
+        // if inputs 011, then key = 4
+        // else if inputs 101, then key = 5
+        // else if inputs 110, then key = 6
+    if((PORTB & 0x0C20) == 0x0420){
+        key = '6';
+        buttonsPressed++;
+    }
+    else if((PORTB & 0x0C20) == 0x0820){
+        key = '5';
+        buttonsPressed++;
+    }
+    else if((PORTB & 0x0C20) == 0x0C00){
+        key = '4';
+        buttonsPressed++;
+    }
+    
+    
+    
+    // set outputs to 1101
+    LATB = (LATB & 0x0FFF) | (0x000D << 12);//row 3
+    DelayUs(2000);
+//    LATAbits.LATA0 = 1;
+//    LATAbits.LATA1 = 1;
+//    LATBbits.LATB2 = 0;
+//    LATBbits.LATB3 = 1;
+        // if inputs 011, then key = 7
+        // else if inputs 101, then key = 8
+        // else if inputs 110, then key = 9
+    if((PORTB & 0x0C20) == 0x0420){
+        key = '9';
+        buttonsPressed++;
+    }
+    else if((PORTB & 0x0C20) == 0x0820){
+        key = '8';
+        buttonsPressed++;
+    }
+    else if((PORTB & 0x0C20) == 0x0C00){ 
+        key = '7';
+        buttonsPressed++;
+    }
+    
+    
+     
+    // set outputs to 1110
+    LATB = (LATB & 0x0FFF) | (0x000E << 12);//row 4
+DelayUs(2000);
+        // if inputs 011, then key = *
+        // else if inputs 101, then key = 0
+        // else if inputs 110, then key = #
+    if((PORTB & 0x0C20) == 0x0420){
+        key = '#';
+        buttonsPressed++;
+    }
+    else if((PORTB & 0x0C20) == 0x0820){
+        key = '0';
+        buttonsPressed++;
+    }
+    else if((PORTB & 0x0C20) == 0x0C00){
+        key = '*';
+        buttonsPressed++;
+    }
+    
+    DelayUs(2000);
+ 
+    LATB = LATB & 0x0FFF;
+   DelayUs(2000);
+    while ((PORTB & 0x0C20) != 0x0C20) {};
+
+    if (buttonsPressed == 1) {
+        return key;
+    }
+
+    return -1;
 }
 
 // ******************************************************************************************* //
