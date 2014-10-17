@@ -1,4 +1,4 @@
-Microchip Technology Inc, v jÅ
+Microchip Technology Inc, v j;
 
 Tool Name:
   c:\program files (x86)\microchip\xc16\v1.21\bin\bin\..\bin/coff-ld.exe
@@ -53,10 +53,10 @@ section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x200                0x98            0xe4  (228)
 .const                       0x298                0x36            0x51  (81)
-.text                        0x2ce               0x70a           0xa8f  (2703)
-.dinit                       0x9d8                0x10            0x18  (24)
+.text                        0x2ce               0x724           0xab6  (2742)
+.dinit                       0x9f2                0x10            0x18  (24)
 
-                     Total program memory used (bytes):          0xbdc  (3036) 4%
+                     Total program memory used (bytes):          0xc03  (3075) 4%
 
 
 Data Memory  [Origin = 0x800, Length = 0x2000]
@@ -98,38 +98,38 @@ External Symbols in Program Memory (by address):
                   0x000236                  __data_init
                   0x000294                  __DefaultInterrupt
                   0x0002ce                  _main
-                  0x00063a                  __CNInterrupt
-                  0x000674                  _checkDatabase
-                  0x0006aa                  _KeypadInitialize
-                  0x0006de                  _KeypadScan
-                  0x00086c                  _DelayUs
-                  0x000896                  _EnableLCD
-                  0x0008c4                  _WriteLCD
-                  0x000908                  _LCDInitialize
-                  0x00097a                  _LCDClear
-                  0x000988                  _LCDMoveCursor
-                  0x0009aa                  _LCDPrintChar
-                  0x0009bc                  _LCDPrintString
+                  0x000648                  __CNInterrupt
+                  0x000682                  _checkDatabase
+                  0x0006b8                  _KeypadInitialize
+                  0x0006e4                  _KeypadScan
+                  0x000886                  _DelayUs
+                  0x0008b0                  _EnableLCD
+                  0x0008de                  _WriteLCD
+                  0x000922                  _LCDInitialize
+                  0x000994                  _LCDClear
+                  0x0009a2                  _LCDMoveCursor
+                  0x0009c4                  _LCDPrintChar
+                  0x0009d6                  _LCDPrintString
 
 External Symbols in Program Memory (by name):
 
-                  0x00086c                  _DelayUs
-                  0x000896                  _EnableLCD
-                  0x0006aa                  _KeypadInitialize
-                  0x0006de                  _KeypadScan
-                  0x00097a                  _LCDClear
-                  0x000908                  _LCDInitialize
-                  0x000988                  _LCDMoveCursor
-                  0x0009aa                  _LCDPrintChar
-                  0x0009bc                  _LCDPrintString
-                  0x0008c4                  _WriteLCD
-                  0x00063a                  __CNInterrupt
+                  0x000886                  _DelayUs
+                  0x0008b0                  _EnableLCD
+                  0x0006b8                  _KeypadInitialize
+                  0x0006e4                  _KeypadScan
+                  0x000994                  _LCDClear
+                  0x000922                  _LCDInitialize
+                  0x0009a2                  _LCDMoveCursor
+                  0x0009c4                  _LCDPrintChar
+                  0x0009d6                  _LCDPrintString
+                  0x0008de                  _WriteLCD
+                  0x000648                  __CNInterrupt
                   0x000294                  __DefaultInterrupt
                   0x000236                  __data_init
                   0x000236                  __data_init_standard
                   0x000226                  __psv_init
                   0x000200                  __resetPRI
-                  0x000674                  _checkDatabase
+                  0x000682                  _checkDatabase
                   0x0002ce                  _main
 
 Memory Configuration
@@ -263,7 +263,7 @@ __CONFIG1         0x00abfe          0x2
                   0x000034          0x4 LONG 0x294 DEFINED (__SI2C1Interrupt)?ABSOLUTE (__SI2C1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000036          0x4 LONG 0x294 DEFINED (__MI2C1Interrupt)?ABSOLUTE (__MI2C1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000038          0x4 LONG 0x294 DEFINED (__CompInterrupt)?ABSOLUTE (__CompInterrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x00003a          0x4 LONG 0x63a DEFINED (__CNInterrupt)?ABSOLUTE (__CNInterrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x00003a          0x4 LONG 0x648 DEFINED (__CNInterrupt)?ABSOLUTE (__CNInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00003c          0x4 LONG 0x294 DEFINED (__INT1Interrupt)?ABSOLUTE (__INT1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00003e          0x4 LONG 0x294 DEFINED (__Interrupt21)?ABSOLUTE (__Interrupt21):ABSOLUTE (__DefaultInterrupt)
                   0x000040          0x4 LONG 0x294 DEFINED (__Interrupt22)?ABSOLUTE (__Interrupt22):ABSOLUTE (__DefaultInterrupt)
@@ -391,7 +391,7 @@ __CONFIG1         0x00abfe          0x2
                   0x000134          0x4 LONG 0x294 DEFINED (__AltSI2C1Interrupt)?ABSOLUTE (__AltSI2C1Interrupt):DEFINED (__SI2C1Interrupt)?ABSOLUTE (__SI2C1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000136          0x4 LONG 0x294 DEFINED (__AltMI2C1Interrupt)?ABSOLUTE (__AltMI2C1Interrupt):DEFINED (__MI2C1Interrupt)?ABSOLUTE (__MI2C1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000138          0x4 LONG 0x294 DEFINED (__AltCompInterrupt)?ABSOLUTE (__AltCompInterrupt):DEFINED (__CompInterrupt)?ABSOLUTE (__CompInterrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x00013a          0x4 LONG 0x63a DEFINED (__AltCNInterrupt)?ABSOLUTE (__AltCNInterrupt):DEFINED (__CNInterrupt)?ABSOLUTE (__CNInterrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x00013a          0x4 LONG 0x648 DEFINED (__AltCNInterrupt)?ABSOLUTE (__AltCNInterrupt):DEFINED (__CNInterrupt)?ABSOLUTE (__CNInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00013c          0x4 LONG 0x294 DEFINED (__AltINT1Interrupt)?ABSOLUTE (__AltINT1Interrupt):DEFINED (__INT1Interrupt)?ABSOLUTE (__INT1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00013e          0x4 LONG 0x294 DEFINED (__AltInterrupt21)?ABSOLUTE (__AltInterrupt21):DEFINED (__Interrupt21)?ABSOLUTE (__Interrupt21):ABSOLUTE (__DefaultInterrupt)
                   0x000140          0x4 LONG 0x294 DEFINED (__AltInterrupt22)?ABSOLUTE (__AltInterrupt22):DEFINED (__Interrupt22)?ABSOLUTE (__Interrupt22):ABSOLUTE (__DefaultInterrupt)
@@ -1104,23 +1104,23 @@ __c30_signature
 .const              0x8298         0x36 load address 0x000298  
  .const             0x8298         0x36 Lab2.o
 
-.text             0x0002ce        0x70a
- .text            0x0002ce        0x3dc Lab2.o
+.text             0x0002ce        0x724
+ .text            0x0002ce        0x3ea Lab2.o
                   0x0002ce                  main
-                  0x00063a                  _CNInterrupt
-                  0x000674                  checkDatabase
- .text            0x0006aa        0x1c2 keypad.o
-                  0x0006aa                  KeypadInitialize
-                  0x0006de                  KeypadScan
- .text            0x00086c        0x16c lcd.o
-                  0x00086c                  DelayUs
-                  0x000896                  EnableLCD
-                  0x0008c4                  WriteLCD
-                  0x000908                  LCDInitialize
-                  0x00097a                  LCDClear
-                  0x000988                  LCDMoveCursor
-                  0x0009aa                  LCDPrintChar
-                  0x0009bc                  LCDPrintString
+                  0x000648                  _CNInterrupt
+                  0x000682                  checkDatabase
+ .text            0x0006b8        0x1ce keypad.o
+                  0x0006b8                  KeypadInitialize
+                  0x0006e4                  KeypadScan
+ .text            0x000886        0x16c lcd.o
+                  0x000886                  DelayUs
+                  0x0008b0                  EnableLCD
+                  0x0008de                  WriteLCD
+                  0x000922                  LCDInitialize
+                  0x000994                  LCDClear
+                  0x0009a2                  LCDMoveCursor
+                  0x0009c4                  LCDPrintChar
+                  0x0009d6                  LCDPrintString
 
-.dinit            0x0009d8         0x10
- .dinit           0x0009d8         0x10 data_init
+.dinit            0x0009f2         0x10
+ .dinit           0x0009f2         0x10 data_init

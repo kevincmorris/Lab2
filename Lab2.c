@@ -130,14 +130,15 @@ int main(void)
 						LCDMoveCursor(1,linePos);
 						LCDPrintChar(key);
 					
-						if (key == '#' && linePos == 4)
+						if (key == '#' && linePos == 4 && check != -2)
 							check = 1;
 						else
 							check = -2;	
 						++linePos;
 					}
-						
-				}		
+	
+				}	
+				LATB = LATB & 0x0FFF;	
 			}
 			
 			// If check == 1, then the user has entered a valid combination for a password, and we will
@@ -246,7 +247,6 @@ int main(void)
 					prevKey = key;		
 					break;
 			}
-			
 		
 		
 	// 		Check value legend:
@@ -303,7 +303,7 @@ int main(void)
 				check = 0;
 				}
 			}
-		
+			LATB = LATB & 0x0FFF;
 		}	
 		
 	return 0;

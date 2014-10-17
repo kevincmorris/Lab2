@@ -2,6 +2,7 @@
 
 #include "p24fj64ga002.h"
 #include "keypad.h"
+#include "lcd.h"
 
 // ******************************************************************************************* //
 
@@ -11,10 +12,10 @@ void KeypadInitialize() {
 	// configuration should ensure that if any key is pressed, a change notification interrupt 
 	// will be generated.
 	// configure outputs
-	TRISAbits.TRISA0=0;
-	TRISAbits.TRISA1=0;
-	TRISBbits.TRISB2=0;
-	TRISBbits.TRISB3=0;
+//	TRISAbits.TRISA0=0;
+//	TRISAbits.TRISA1=0;
+//	TRISBbits.TRISB2=0;		// ALREADY SET IN THE LCD.C
+//	TRISBbits.TRISB3=0;
 
 	// configure inputs 
 	TRISBbits.TRISB5=1;
@@ -22,16 +23,16 @@ void KeypadInitialize() {
 	TRISBbits.TRISB11=1;
 
 	// configure outputs to open drain
-	ODCAbits.ODA0=1;
-	ODCAbits.ODA1=1;
-	ODCBbits.ODB2=1;
-	ODCBbits.ODB3=1;
+	ODCBbits.ODB12=1;
+	ODCBbits.ODB13=1;
+	ODCBbits.ODB14=1;
+	ODCBbits.ODB15=1;
 
 	// set ouputs to zero to allow change notification
-	LATAbits.LATA0=0;
-	LATAbits.LATA1=0;
-	LATBbits.LATB2=0;
-	LATBbits.LATB3=0;
+	LATBbits.LATB12=0;
+	LATBbits.LATB13=0;
+	LATBbits.LATB14=0;
+	LATBbits.LATB15=0;
 
 	//set internal pull up resistors for inputs 
 	CNPU2bits.CN27PUE = 1;
@@ -67,15 +68,15 @@ char KeypadScan() {
 	//           is processed. This is to prevent invalid keypress from being processed if the 
 	//           users presses multiple keys simultaneously.
 	//
-	T1CON = 0x0030;
-	TMR1 = 0;
-	PR1 = 575;
-	IFS0bits.T1IF = 0;
-	_TON = 1;
-	while(IFS0bits.T1IF == 0){};
-	TMR1 = 0;
-	_TON= 0;
-	IFS0bits.T1IF = 0;
+//	T1CON = 0x0030;
+//	TMR1 = 0;
+//	PR1 = 575;
+//	IFS0bits.T1IF = 0;
+//	_TON = 1;
+//	while(IFS0bits.T1IF == 0){};
+//	TMR1 = 0;
+//	_TON= 0;
+//	IFS0bits.T1IF = 0;
 
 	
 	
@@ -99,13 +100,11 @@ char KeypadScan() {
     
     key = '-1';
     buttonsPressed = 0;
-    
+    LATB = (LATB & 0x0FFF);
 
     // set Outputs to 0111
-    LATAbits.LATA0 = 0;
-    LATAbits.LATA1 = 1;
-    LATBbits.LATB2 = 1;
-    LATBbits.LATB3 = 1;
+    LATB = (LATB & 0x0FFF) | (0x0007 << 12);//row 1
+DelayUs(2000);
         // if inputs 011, then key = 1
         // else if inputs 101, then key = 2
         // else if inputs 110, then key = 3
@@ -121,12 +120,15 @@ char KeypadScan() {
         key = '1';
         buttonsPressed++;
     }
-        
+       
+    
     // set outputs to 1011
-    LATAbits.LATA0 = 1;
-    LATAbits.LATA1 = 0;
-    LATBbits.LATB2 = 1;
-    LATBbits.LATB3 = 1;
+    LATB = (LATB & 0x0FFF) | (0x000B << 12);//row 2
+    DelayUs(2000);
+//	LATBbits.LATB12=1;
+//	LATBbits.LATB13=0;
+//	LATBbits.LATB14=1;
+//	LATBbits.LATB15=1;
         // if inputs 011, then key = 4
         // else if inputs 101, then key = 5
         // else if inputs 110, then key = 6
@@ -143,11 +145,15 @@ char KeypadScan() {
         buttonsPressed++;
     }
     
+    
+    
     // set outputs to 1101
-    LATAbits.LATA0 = 1;
-    LATAbits.LATA1 = 1;
-    LATBbits.LATB2 = 0;
-    LATBbits.LATB3 = 1;
+    LATB = (LATB & 0x0FFF) | (0x000D << 12);//row 3
+    DelayUs(2000);
+//    LATAbits.LATA0 = 1;
+//    LATAbits.LATA1 = 1;
+//    LATBbits.LATB2 = 0;
+//    LATBbits.LATB3 = 1;
         // if inputs 011, then key = 7
         // else if inputs 101, then key = 8
         // else if inputs 110, then key = 9
@@ -159,15 +165,16 @@ char KeypadScan() {
         key = '8';
         buttonsPressed++;
     }
-    else if((PORTB & 0x0C20) == 0x0C00){
+    else if((PORTB & 0x0C20) == 0x0C00){ 
         key = '7';
         buttonsPressed++;
     }
+    
+    
+     
     // set outputs to 1110
-    LATAbits.LATA0 = 1;
-    LATAbits.LATA1 = 1;
-    LATBbits.LATB2 = 1;
-    LATBbits.LATB3 = 0;
+    LATB = (LATB & 0x0FFF) | (0x000E << 12);//row 4
+DelayUs(2000);
         // if inputs 011, then key = *
         // else if inputs 101, then key = 0
         // else if inputs 110, then key = #
@@ -184,18 +191,16 @@ char KeypadScan() {
         buttonsPressed++;
     }
     
-    LATAbits.LATA0 = 0;
-    LATAbits.LATA1 = 0;
-    LATBbits.LATB2 = 0;
-    LATBbits.LATB3 = 0;
+    DelayUs(2000);
+ 
+    LATB = LATB & 0x0FFF;
+   DelayUs(2000);
+    while ((PORTB & 0x0C20) != 0x0C20) {};
+
     if (buttonsPressed == 1) {
         return key;
     }
-    
-	LATAbits.LATA0 = 0;
-    LATAbits.LATA1 = 0;
-    LATBbits.LATB2 = 0;
-    LATBbits.LATB3 = 0;
+
     return -1;
 }
 
